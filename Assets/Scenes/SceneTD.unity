@@ -3908,6 +3908,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1023219709}
     m_Modifications:
+    - target: {fileID: 133102, guid: 2d927feb0fbf1a7429c095369d395de7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 156806, guid: 2d927feb0fbf1a7429c095369d395de7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 164122, guid: 2d927feb0fbf1a7429c095369d395de7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 408632, guid: 2d927feb0fbf1a7429c095369d395de7, type: 3}
       propertyPath: m_RootOrder
       value: 18
@@ -7637,9 +7649,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 954395077}
   followRadius: 3
-  speed: 1.5
-  brakes: 1.5
-  gravity: 9.8
+  speed: 0.8
+  brakes: 3
 --- !u!54 &776059208
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7667,6 +7678,111 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!82 &776059209
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776059204}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4665d560cabe65e43a84519bf0078ab2, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 2.02
+  MinDistance: 5
+  MaxDistance: 24
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.16977137
+      value: 0.9957962
+      inSlope: -4.260675
+      outSlope: -7.206283
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.27370995
+    - serializedVersion: 3
+      time: 0.24780509
+      value: 0.6152502
+      inSlope: -2.6268055
+      outSlope: -2.2785654
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.86555773
+      outWeight: 0.10094695
+    - serializedVersion: 3
+      time: 0.9914627
+      value: 0.10915375
+      inSlope: -0.052260693
+      outSlope: -0.1420925
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.56721747
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &780142969
 GameObject:
   m_ObjectHideFlags: 0
@@ -12511,6 +12627,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a89be680388aaa348ac474f37e0c8ebc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 776059208}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a89be680388aaa348ac474f37e0c8ebc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 776059209}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a89be680388aaa348ac474f37e0c8ebc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 776059207}

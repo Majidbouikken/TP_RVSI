@@ -6,9 +6,8 @@ public class BB8_script : MonoBehaviour
 {
     public Transform player; // Reference de PlayerArmature
     public float followRadius = 3f; // Le rayon de suivi de BB8, par default a 3 metres
-    public float speed = 1.5f;
+    public float speed = 0.8f;
     public float brakes = 3f;
-    public float gravity = 9.8f;
 
     private Rigidbody rb;
     private Transform headTransform;
