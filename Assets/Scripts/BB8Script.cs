@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BB8_script : MonoBehaviour
+public class BB8Script : MonoBehaviour
 {
     public Transform player; // Reference de PlayerArmature
     public float followRadius = 3f; // Le rayon de suivi de BB8, par default a 3 metres
@@ -15,7 +15,7 @@ public class BB8_script : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponentInChildren<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         headTransform = transform.Find("BB8_tete");
         bodyTransform = transform.Find("BB8_corps");
 
@@ -42,11 +42,11 @@ public class BB8_script : MonoBehaviour
 
     void MoveBB8()
     {
-        Vector3 acceleration = (player.position - transform.position);
-        acceleration.y = 0;
-        acceleration.Normalize();
+        Vector3 direction = (player.position - transform.position);
+        direction.y = 0;
+        direction.Normalize();
 
-        rb.AddForce(acceleration * speed, ForceMode.Acceleration);
+        rb.AddForce(direction * speed, ForceMode.Acceleration);
     }
 
     void StopBB8()
