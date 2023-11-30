@@ -48,7 +48,7 @@ public class BB8Script : MonoBehaviour
         {
             MoveBB8(directionToPlayer);
         }
-        else if (distanceToPlayer <= followRadius && IsMoving())
+        else if (distanceToPlayer <= followRadius && IsMoving() || !isActive)
         {
             StopBB8();
         }
