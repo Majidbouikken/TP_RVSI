@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class LightCornerScript : MonoBehaviour
 {
-    private Light light;
+    private Light light; // On prend la reference de la lumiere
 
     public float minDistance = 3f;
     public float maxDistance = 6f;
-    public float intensityMultiplier = 3f;
+    public float intensityMultiplier = 6f;
     public Transform player;
 
     void Start()

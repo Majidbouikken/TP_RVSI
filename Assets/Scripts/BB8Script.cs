@@ -3,16 +3,16 @@ using UnityEngine;
 public class BB8Script : MonoBehaviour
 {
     public Transform player; // Reference de PlayerArmature
-    public float followRadius = 3f; // Le rayon de suivi de BB8, par default a 3 metres
+    public float followRadius = 5f; // Le rayon de suivi de BB8, par default a 3 metres
     public float speed = 0.8f; // Le BB8 est plus lent que le joueur
     public float headRotationSpeed = 5f;
     public float brakes = 3f;
 
-    private bool isActive = true; // on active ou desactive le BB8 selon ce boolean
     private Rigidbody rb;
     private Transform headTransform;
     private Transform bodyTransform;
     private AudioSource audioSource;
+    private bool isActive = true; // on active ou desactive le BB8 selon ce boolean
 
     private void Start()
     {
@@ -33,6 +33,7 @@ public class BB8Script : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(bodyTransform.position, player.position);
         Vector3 directionToPlayer = (player.position - bodyTransform.position);
 
+        // Son du BB8
         if (Input.GetKeyDown(KeyCode.H))
         {
             if (!audioSource.isPlaying)
@@ -40,10 +41,14 @@ public class BB8Script : MonoBehaviour
                 audioSource.Play();
             }
         }
+
+        // Activer ou Desactiver le BB8
         if (Input.GetKeyDown(KeyCode.B))
         {
             isActive = !isActive;
         }
+
+        // Mouvement du BB8
         if ((distanceToPlayer > followRadius) && isActive)
         {
             MoveBB8(directionToPlayer);
@@ -52,6 +57,8 @@ public class BB8Script : MonoBehaviour
         {
             StopBB8();
         }
+
+        // Rotataion de la tete du BB8
         MoveHead(directionToPlayer);
     }
 
