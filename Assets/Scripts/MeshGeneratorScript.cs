@@ -10,6 +10,7 @@ public class MeshGeneratorScript : MonoBehaviour
     private new GameObject gameObject;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    private Light light;
     private Vector3[] vertices;
     private int[] triangles;
 
@@ -36,6 +37,12 @@ public class MeshGeneratorScript : MonoBehaviour
 
         gameObject.transform.position = new Vector3(2.968165f, 2f, -3.129097f);
         gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+        // Ajouter la lumiere
+        light = gameObject.AddComponent<Light>();
+        light.color = new Color(1f, 0.898f, 0.392f); // #FFE564 en hex
+        light.range = 3f;
+        light.intensity = 3.6f;
     }
 
     public void Update()
