@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class BatteryLightColorChanger : MonoBehaviour
 {
-    public Light[] lights;
     public Collider[] triggerColliders;
+    public Light[] lights;
+    public Material emissiveMaterial;
 
     private bool[] triggerStates;
 
@@ -27,6 +28,7 @@ public class BatteryLightColorChanger : MonoBehaviour
                 if (CheckAllTriggersActivated())
                 {
                     ChangeLightsColor(Color.cyan);
+                    ChangeEmissiveColor(Color.cyan * 2.0f);
                 }
             }
         }
@@ -51,5 +53,10 @@ public class BatteryLightColorChanger : MonoBehaviour
         {
             light.color = newColor;
         }
+    }
+
+    void ChangeEmissiveColor(Color newColor)
+    {
+        emissiveMaterial.SetColor("_EmissionColor", newColor);
     }
 }
