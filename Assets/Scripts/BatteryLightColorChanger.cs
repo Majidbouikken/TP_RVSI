@@ -14,6 +14,7 @@ public class BatteryLightColorChanger : MonoBehaviour
     void Start()
     {
         triggerStates = new bool[triggerColliders.Length];
+        ChangeEmissiveColor(Color.red * 2.0f);
     }
 
     void OnTriggerEnter(Collider collider)
