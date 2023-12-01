@@ -8,18 +8,45 @@ public class MeshGeneratorScript : MonoBehaviour
     public float rotationSpeed = 30f;
 
     private new GameObject gameObject;
-    private Vector3[] verticies;
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+    private Vector3[] vertices;
     private int[] triangles;
 
     public void Start()
     {
         gameObject = new GameObject("My3dObject");
-        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        meshFilter = gameObject.AddComponent<MeshFilter>();
+        meshRenderer = gameObject.AddComponent<MeshRenderer>();
         meshRenderer.material = newMatObject;
+        // meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        // meshRenderer.receiveShadows = true;
         meshFilter.mesh = new Mesh();
 
-        verticies = new Vector3[]
+        // On selectionne un mesh aleatoirement
+        int randomMeshType = Random.Range(0, 2); // 0 pour cube, 1 pour sphere et 2 pour gem
+
+        if (randomMeshType == 0)
+        {
+            GenerateCube();
+        } else
+        {
+            GenerateGem();
+        }
+
+        gameObject.transform.position = new Vector3(2.968165f, 2f, -3.129097f);
+        gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+    }
+
+    public void Update()
+    {
+        gameObject.transform.Rotate(new Vector3(1, 1, 1), rotationSpeed * Time.deltaTime);
+    }
+
+    // Pour generer un cube
+    private void GenerateCube()
+    {
+        vertices = new Vector3[]
         {
             new Vector3(-0.5f,-0.5f,-0.5f), // 0
             new Vector3(-0.5f,-0.5f,0.5f), // 1
@@ -48,15 +75,64 @@ public class MeshGeneratorScript : MonoBehaviour
         };
 
         meshFilter.mesh.Clear();
-        meshFilter.mesh.vertices = verticies;
+        meshFilter.mesh.vertices = vertices;
         meshFilter.mesh.triangles = triangles;
-
-        gameObject.transform.position = new Vector3(2.968165f, 2f, -3.129097f);
-        gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
-    public void Update()
+    // Pour generer un Gem
+    private void GenerateGem()
     {
-        gameObject.transform.Rotate(new Vector3(1, 1, 1), rotationSpeed * Time.deltaTime);
+        float height = 1.2f; // Height of the gem
+        float bottomRadius = 0.6f; // Radius of the bottom octagon
+        float topRadius = 0.4f; // Radius of the top octagon
+        int numSides = 8; // Number of sides for both octagons
+
+        vertices = new Vector3[numSides * 2 + 1]; // One extra vertex for the top
+        triangles = new int[numSides * 9]; // Each side contributes 3 triangles
+
+        // Calculate vertices for the bottom octagon
+        for (int i = 0; i < numSides; i++)
+        {
+            float angle = i * 360f / numSides;
+            vertices[i] = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * bottomRadius, -height / 4f, Mathf.Cos(angle * Mathf.Deg2Rad) * bottomRadius);
+        }
+
+        // Calculate vertices for the top octagon
+        for (int i = 0; i < numSides; i++)
+        {
+            float angle = i * 360f / numSides;
+            vertices[numSides + i] = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * topRadius, -height / 2f, Mathf.Cos(angle * Mathf.Deg2Rad) * topRadius);
+        }
+
+        // Top vertex
+        vertices[numSides * 2] = new Vector3(0f, height / 2f, 0f);
+
+        // Calculate triangles for the bottom octagon
+        for (int i = 0; i < numSides; i++)
+        {
+            triangles[i * 3] = i;
+            triangles[i * 3 + 1] = (i + 1) % numSides;
+            triangles[i * 3 + 2] = numSides * 2; // Connect to the top vertex
+        }
+
+        // Calculate triangles for the top octagon
+        for (int i = 0; i < numSides; i++)
+        {
+            triangles[(numSides * 3) + i * 3] = numSides + i;
+            triangles[(numSides * 3) + i * 3 + 1] = numSides + (i + 1) % numSides;
+            triangles[(numSides * 3) + i * 3 + 2] = numSides * 2; // Connect to the top vertex
+        }
+
+        // Calculate triangles connecting the bottom and top octagons
+        for (int i = 0; i < numSides; i++)
+        {
+            triangles[(numSides * 6) + i * 3] = i;
+            triangles[(numSides * 6) + i * 3 + 1] = (i + 1) % numSides;
+            triangles[(numSides * 6) + i * 3 + 2] = numSides + (i + 1) % numSides;
+        }
+
+        meshFilter.mesh.Clear();
+        meshFilter.mesh.vertices = vertices;
+        meshFilter.mesh.triangles = triangles;
     }
 }
