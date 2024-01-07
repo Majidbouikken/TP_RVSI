@@ -7,11 +7,17 @@ public class SceneManagerScript : MonoBehaviour
 {
     public Camera globalCamera;
     public GameObject playerArmature;
+    [Header("Countdown")]
     public int countdownDuration = 3;
     public TMP_Text countdownText;
+    [Header("Destroyables")]
+    public GameObject[] destroyableOBjects;
+    public static int totalDestroyableOBjects = 0;
+    public static int destroyedObjects = 0;
+    public TMP_Text destroyedCount;
+    public TMP_Text totalDestroyableCount;
 
     public event System.Action CountdownCompleted;
-
 
     void Start()
     {
@@ -19,10 +25,17 @@ public class SceneManagerScript : MonoBehaviour
         playerArmature.SetActive(false);
 
         countdownText.text = countdownDuration.ToString();
+        totalDestroyableOBjects = destroyableOBjects.Length;
+        totalDestroyableCount.text = "/" + totalDestroyableOBjects.ToString();
 
         StartCoroutine(CountdownCoroutine());
 
         Invoke("SpawnPlayer", countdownDuration); // On affiche le joueur apres 3 secondes
+    }
+
+    private void Update()
+    {
+        destroyedCount.text = destroyedObjects.ToString();
     }
 
     // La fonction SpawnPlayer est responsable de l'apparition du joueur apres 3 secondes
@@ -53,6 +66,29 @@ public class SceneManagerScript : MonoBehaviour
         if (CountdownCompleted != null)
         {
             CountdownCompleted.Invoke();
+        }
+    }
+
+    public static bool WinningCondition()
+    {
+        return destroyedObjects == totalDestroyableOBjects;
+    }
+
+    public static void DisplayWinningText()
+    {
+        GameObject victoryText = GameObject.Find("GUI").transform.Find("Victory Text").gameObject;
+        if (victoryText != null)
+        {
+            victoryText.SetActive(true);
+        }
+    }
+
+    public static void DisplayDefeatText()
+    {
+        GameObject defeatText = GameObject.Find("GUI").transform.Find("Defeat Text").gameObject;
+        if (defeatText != null)
+        {
+            defeatText.SetActive(true);
         }
     }
 }

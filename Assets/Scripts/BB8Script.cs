@@ -7,11 +7,14 @@ public class BB8Script : MonoBehaviour
     public float speed = 0.8f; // Le BB8 est plus lent que le joueur
     public float headRotationSpeed = 5f;
     public float brakes = 3f;
+    public AudioSource audioSource;
+    public AudioClip[] audioClips;
 
     private Rigidbody rb;
     private Transform headTransform;
     private Transform bodyTransform;
-    private AudioSource audioSource;
+    private ParticleSystem poussiere;
+    private Transform poussiereTransform;
     private bool isActive = true; // on active ou desactive le BB8 selon ce boolean
 
     private void Start()
@@ -19,7 +22,9 @@ public class BB8Script : MonoBehaviour
         rb = GetComponentInChildren<Rigidbody>();
         headTransform = transform.Find("BB8_tete");
         bodyTransform = transform.Find("BB8_corps");
-        audioSource = GetComponent<AudioSource>();
+        poussiere = GetComponentInChildren<ParticleSystem>();
+        poussiereTransform = transform.Find("Poussiere_fx");
+        audioSource = GetComponentInChildren<AudioSource>();
 
         if (rb == null)
         {
@@ -36,16 +41,13 @@ public class BB8Script : MonoBehaviour
         // Son du BB8
         if (Input.GetKeyDown(KeyCode.H))
         {
-            if (!audioSource.isPlaying)
-            {
-                audioSource.Play();
-            }
+            MakeSound();
         }
 
         // Activer ou Desactiver le BB8
         if (Input.GetKeyDown(KeyCode.B))
         {
-            isActive = !isActive;
+            Activate();
         }
 
         // Mouvement du BB8
@@ -58,8 +60,33 @@ public class BB8Script : MonoBehaviour
             StopBB8();
         }
 
-        // Rotataion de la tete du BB8
-        MoveHead(directionToPlayer);
+        // Rotataion de la tete du BB8 et Mouvement de la poussiere
+        MoveHead(directionToPlayer, transform.position);
+        MovePoussiere(directionToPlayer, transform.position);
+    }
+
+    // Cette methode pour gerer l'activation, la vitesse et l'orientation de la poussiere
+    public void HandleCollision(Collision collision)
+    {
+        if (collision.collider.tag == "SolExterieur")
+        {
+            if (!poussiere.isPlaying)
+            {
+                poussiere.Play();   
+            }
+            else if (!IsMoving())
+            {
+                poussiere.Stop();
+            }
+            poussiereTransform.LookAt(bodyTransform.position - rb.velocity);
+        }
+        else
+        {
+            if (poussiere.isPlaying)
+            {
+                poussiere.Stop();
+            }
+        }
     }
 
     void MoveBB8(Vector3 directionToPlayer)
@@ -82,19 +109,42 @@ public class BB8Script : MonoBehaviour
         }
     }
 
-    void MoveHead(Vector3 directionToPlayer)
+    void MoveHead(Vector3 directionToPlayer, Vector3 transform)
     {
-        Vector3 newHeadPosition = new Vector3(bodyTransform.localPosition.x, bodyTransform.localPosition.y + 0.27f, bodyTransform.localPosition.z);
+        // Move head
+        Vector3 newHeadPosition = new Vector3(bodyTransform.localPosition.x + transform.x, bodyTransform.localPosition.y + transform.y + 0.27f, bodyTransform.localPosition.z + transform.z);
         headTransform.position = newHeadPosition;
 
         // Rotate head
-        float angle = Mathf.Atan2(directionToPlayer.x, directionToPlayer.z) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
+        float newHeadAngle = Mathf.Atan2(directionToPlayer.x, directionToPlayer.z) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0f, newHeadAngle, 0f);
         headTransform.rotation = Quaternion.Slerp(headTransform.rotation, targetRotation, headRotationSpeed * Time.deltaTime);
+    }
+
+    void MovePoussiere(Vector3 directionToPlayer, Vector3 transform)
+    {
+        Vector3 newDustPosition = new Vector3(bodyTransform.localPosition.x + transform.x, bodyTransform.localPosition.y + transform.y + 0.27f, bodyTransform.localPosition.z + transform.z);
+        poussiereTransform.position = newDustPosition;
     }
 
     bool IsMoving()
     {
-        return rb.velocity.magnitude > 0.01f;
+        return rb.velocity.magnitude > 0.05f;
+    }
+
+    public void MakeSound()
+    {
+        if (!audioSource.isPlaying)
+        {
+            int randomIndex = Random.Range(0, audioClips.Length);
+            AudioClip randomClip = audioClips[randomIndex];
+            audioSource.clip = randomClip;
+            audioSource.Play();
+        }
+    }
+
+    public void Activate()
+    {
+        isActive = !isActive;
     }
 }

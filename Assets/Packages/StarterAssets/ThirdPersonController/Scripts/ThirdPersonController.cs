@@ -75,6 +75,9 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Tooltip("For locking moving with the Player")]
+        public bool LockMoving = false;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -135,7 +138,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -158,12 +161,43 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
-            Move();
+            if (!LockMoving)
+            {
+                Move();
+            }
         }
 
         private void LateUpdate()
         {
             CameraRotation();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "FinishFlag")
+            {
+                LockMoving = true;
+                if (_hasAnimator)
+                {
+                    _animator.SetBool("NearFlag", true);
+                    if (SceneManagerScript.WinningCondition())
+                    {
+                        _animator.SetBool("Winning", true);
+                        SceneManagerScript.DisplayWinningText();
+                    } else
+                    {
+                        SceneManagerScript.DisplayDefeatText();
+                    }
+                }
+            } else if (other.tag == "Enemy")
+            {
+                LockMoving = true;
+                if (_hasAnimator)
+                {
+                    _animator.SetBool("Death", true);
+                    SceneManagerScript.DisplayDefeatText();
+                }
+            }
         }
 
         private void AssignAnimationIDs()

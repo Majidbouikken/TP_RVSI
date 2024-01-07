@@ -23,7 +23,6 @@ public class BatteryLightColorChanger : MonoBehaviour
         {
             if (collider == triggerColliders[i])
             {
-                Debug.Log("Rah yel7ag hna");
                 triggerStates[i] = true;
 
                 if (CheckAllTriggersActivated())

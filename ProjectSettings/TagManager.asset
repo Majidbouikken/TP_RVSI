@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+  - SolExterieur
+  - BB8
+  - FinishFlag
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -12,7 +16,7 @@ TagManager:
   - Collider
   - Water
   - UI
-  - 
+  - "D\xE9coupable"
   - 
   - 
   - 
